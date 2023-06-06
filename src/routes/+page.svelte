@@ -3,6 +3,7 @@
     import { AppRail, AppRailTile, AppRailAnchor } from '@skeletonlabs/skeleton';
     import 'xterm/css/xterm.css'
 	import Terminal from '../components/Terminal/Terminal.svelte';
+	import Chat from '../components/Chat/Chat.svelte';
     let currentTile = 0
 </script>
 
@@ -44,7 +45,9 @@
 	<!-- Router Slot -->
     <div class="flex flex-row h-full">
         <div class="p-5 grow">
-            <div class="card p-5 variant-glass-primary h-full">Main</div>
+            <div class="card variant-glass-primary h-full">
+                <Chat />
+            </div>
         </div>
         <div class="flex flex-col p-5 h-full">
             <div class="h-min">
