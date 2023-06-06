@@ -10,5 +10,6 @@ export const lotus = (terminal: Terminal) => {
     xterm.writeln(`/**     //**     **    /**   /**    /**       /**`)
     xterm.writeln(`/********//*******     /**   //*******  ******** `)
     xterm.writeln(`////////  ///////      //     ///////  ////////  `)
+    xterm.writeln('')
     terminal.prompt()
 }

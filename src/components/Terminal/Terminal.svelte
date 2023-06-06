@@ -14,8 +14,6 @@
     })
 </script>
 
-<div class="p-5">
     <div class="p-5 bg-surface-900 opacity-80 card w-min">
         <div class="" bind:this={terminalEl}></div>
     </div>
-</div>

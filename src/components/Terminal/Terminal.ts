@@ -19,15 +19,21 @@ export const createTerminal = async (terminalEl: HTMLElement, user: User): Promi
         }
     })
 
-    let newBufferPrefix = `${user?.id.split('-')[0]}@lotus-os:-$ `
+    const getNewBufferPrefix = async () => {
+        let path = await emulator.bash.getDir()
+        if(path.startsWith('/home/user')){
+            path = path.replace('/home/user', '~')
+        }
+        return `${user?.id.split('-')[0]}@lotus-os:${path} $ `
+    }
 
     xtermInstance.open(terminalEl)
 
     const emulator = await createBashEmulator()
 
     const bufferHistory = {
-        history: [] as string[],
-        index: -1,
+        history: [''] as string[],
+        index: 0,
     }
 
     const getBuffer = () => {
@@ -38,7 +44,7 @@ export const createTerminal = async (terminalEl: HTMLElement, user: User): Promi
         bufferHistory.history[bufferHistory.index] = buffer
     }
 
-    xtermInstance.onKey(({key, domEvent}) => {
+    xtermInstance.onKey(async ({key, domEvent}) => {
         let buffer = getBuffer()
         console.log(bufferHistory)
         if(domEvent.key === 'Enter'){
@@ -50,22 +56,22 @@ export const createTerminal = async (terminalEl: HTMLElement, user: User): Promi
             }
         } else if(domEvent.key === 'ArrowUp') {
             domEvent.stopPropagation()
-            if(bufferHistory.index - 1 > -1){
+            if(bufferHistory.index - 1 > 0){
                 --bufferHistory.index
                 for(let c=0; c<100; c++){
                     xtermInstance.write("\b \b")
                 }
-                xtermInstance.write(newBufferPrefix)
+                xtermInstance.write(await getNewBufferPrefix())
                 xtermInstance.write(getBuffer())
             }
         } else if(domEvent.key === 'ArrowDown') {
             domEvent.stopPropagation()
-            if(bufferHistory.index + 1 < bufferHistory.history.length){
+            if(bufferHistory.index + 2 < bufferHistory.history.length){
                 ++bufferHistory.index
                 for(let c=0; c<100; c++){
                     xtermInstance.write("\b \b")
                 }
-                xtermInstance.write(newBufferPrefix)
+                xtermInstance.write(await getNewBufferPrefix())
                 xtermInstance.write(getBuffer())
             }
             // implement
@@ -100,8 +106,7 @@ export const createTerminal = async (terminalEl: HTMLElement, user: User): Promi
     }
 
     const prompt = async () => {
-        xtermInstance.writeln('')
-        xtermInstance.write(newBufferPrefix)
+        xtermInstance.write(await getNewBufferPrefix())
         const buffer = getBuffer()
         if(buffer.trim()) {
             bufferHistory.history.push(getBuffer())

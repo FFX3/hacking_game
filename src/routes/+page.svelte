@@ -42,11 +42,20 @@
         </div>
     </svelte:fragment>
 	<!-- Router Slot -->
-    <div class="p-5 h-full">
-        <div class="card p-5 variant-glass-primary h-full">Main</div>
+    <div class="flex flex-row h-full">
+        <div class="p-5 grow">
+            <div class="card p-5 variant-glass-primary h-full">Main</div>
+        </div>
+        <div class="flex flex-col p-5 h-full">
+            <div class="h-min">
+                <Terminal />
+            </div>
+            <div class="mt-5 flex-1">
+                <div class="card variant-glass-primary h-full p-5">
+                    Nodes
+                </div>
+            </div>
+        </div>
     </div>
-    <svelte:fragment slot="pageFooter">
-        <Terminal />
-    </svelte:fragment>
 	<!-- ---- / ---- -->
 </AppShell>
